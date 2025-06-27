@@ -83,7 +83,18 @@ const displayMovements = function (movement) {
 };
 displayMovements(account1.movements);
 
-console.log(containerMovements.innerHTML);
+const createUsernames = function (acc) {
+  acc.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+createUsernames(accounts);
+console.log(accounts);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -178,4 +189,23 @@ console.log(containerMovements.innerHTML);
 // currenciesUnique.forEach(function (value, _value, map) {
 //   console.log(`${_value}: ${value}`);
 // });
-//==============
+//======================MAP METHOD==========================
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// const eurToUsd = 1.1;
+
+// const movementsUSD = movements.map(function (mov) {
+//   return mov * eurToUsd;
+// });
+
+// const movementsArrowUSD = movements.map(mov => mov * eurToUsd);
+
+// // console.log(movements);
+// // console.log(movementsUSD);
+
+// const movementsDescriptions = movements.map((mov, i) => {
+//   return `Movement ${i + 1}: You ${
+//     mov > 0 ? 'deposited' : 'withdrew'
+//   } ${Math.abs(mov)}`;
+// });
+// // console.log(movementsDescriptions);
