@@ -94,7 +94,13 @@ const createUsernames = function (acc) {
 };
 
 createUsernames(accounts);
-console.log(accounts);
+
+const calcDisplayBalance = function (movements) {
+  const balace = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balace} EUR`;
+};
+
+calcDisplayBalance(account1.movements);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -209,3 +215,30 @@ console.log(accounts);
 //   } ${Math.abs(mov)}`;
 // });
 // // console.log(movementsDescriptions);
+//===================FILTER METHOD========================
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// const deposits = movements.filter(function (mov) {
+//   return mov > 0;
+// });
+// console.log(movements);
+// console.log(deposits);
+
+// const withdrawals = movements.filter(move => move < 0);
+// console.log(withdrawals);
+//=================REDUCE METHOD=========================
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// // accumulator snowball
+// const balance = movements.reduce(function (acc, cur, i, arr) {
+//   console.log(`Iteration ${i}: ${acc}`);
+//   return acc + cur;
+// }, 0);
+// console.log(balance);
+// console.log(movements);
+
+// let balance2 = 0
+// for(const mov of movements) {
+//   balance2 += mov
+// }
+// console.log(balance2);
