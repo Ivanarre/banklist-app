@@ -27,7 +27,7 @@ const account3 = {
 };
 
 const account4 = {
-  owner: 'Sarah Smith',
+  owner: 'Jonamae Lazana',
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
@@ -178,6 +178,21 @@ btnTransfer.addEventListener('click', function (e) {
     // Update UI
     updateUI(currentAccount);
   }
+});
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // Add movement
+    currentAccount.movements.push(amount);
+
+    // Update UI
+    updateUI(currentAccount);
+  }
+
+  inputLoanAmount.value = '';
 });
 
 // Delete account
@@ -388,4 +403,32 @@ btnClose.addEventListener('click', function (e) {
 //   }
 // }
 // console.log(accountLoop);
-//==========================================================
+//===============FINDLAST & FINDLASTINDEX METHODS====================
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// console.log(movements);
+// const lastWithdrawal = movements.findLast(mov => mov < 0);
+// console.log(lastWithdrawal); // -130
+
+// //Yoy latest large movement was x movements ago
+// const latestLargeMovementIndex = movements.findLastIndex(
+//   mov => Math.abs(mov) > 2000
+// );
+// console.log(latestLargeMovementIndex);
+// console.log(
+//   `Your latest large movement was ${
+//     movements.length - latestLargeMovementIndex
+//   } movements ago`
+// );
+//=======================SOME & EVERY=============================
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// console.log(movements);
+// // check only for equality
+// console.log(movements.includes(-130));
+
+// // check for a condition
+// console.log(movements.some(mov => mov === -130));
+
+// //if any value is > than 0 return true
+// const anyDeposits = movements.some(mov => mov > 0);
+// console.log(anyDeposits);
+//=================================================
