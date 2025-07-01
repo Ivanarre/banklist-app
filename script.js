@@ -61,11 +61,13 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movement) {
+const displayMovements = function (movement, sort = false) {
   containerMovements.innerHTML = '';
   // .textContent = 0;
 
-  movement.forEach(function (mov, i) {
+  const movs = sort ? movement.slice().sort((a, b) => a - b) : movement;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -216,6 +218,13 @@ btnClose.addEventListener('click', function (e) {
     containerApp.style.opacity = 0;
   }
   inputCloseUsername.value = inputClosePin.value = '';
+});
+
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -381,7 +390,7 @@ btnClose.addEventListener('click', function (e) {
 //=======================FIND METHOD===========================
 // const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-// //only return the first one value that is true / not an array
+// // only return the first one value that is true / not an array
 // const firstWitdrawal = movements.find(function (mov) {
 //   return mov < 0;
 // });
@@ -426,9 +435,166 @@ btnClose.addEventListener('click', function (e) {
 // console.log(movements.includes(-130));
 
 // // check for a condition
+// // SOME: CONDITION
 // console.log(movements.some(mov => mov === -130));
 
 // //if any value is > than 0 return true
 // const anyDeposits = movements.some(mov => mov > 0);
 // console.log(anyDeposits);
-//=================================================
+
+// // EVERY
+// console.log(movements.every(mov => mov > 0));
+// console.log(account4.movements.every(mov => mov > 0));
+
+// // Separate callback
+// const deposit = mov => mov > 0;
+// console.log(movements.some(deposit));
+// console.log(movements.every(deposit));
+// console.log(movements.filter(deposit));
+//====================FLAT & FLATMAP METHOD===========================
+// const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+
+// // remove nested arr into one array
+// console.log(arr.flat());
+
+// const arrDeep = [
+//   [[1, 2], 3],
+//   [4, [5, 6]],
+//   [7, 8],
+// ];
+
+// // second level
+// console.log(arrDeep.flat(2));
+
+// //add movements
+// const overalBalance = accounts
+//   .map(acc => acc.movements)
+//   .flat()
+//   .reduce((acc, mov) => acc + mov, 0);
+// console.log(overalBalance);
+
+// //flatMap method combind map and flat method
+// const overalBalance1 = accounts
+//   .flatMap(acc => acc.movements)
+//   .flat()
+//   .reduce((acc, mov) => acc + mov, 0);
+// console.log(overalBalance1);
+//===========================CHALLEGE===============================
+
+// const breeds = [
+//   {
+//     breed: 'German Shepherd',
+//     averageWeight: 32,
+//     activities: ['fetch', 'swimming'],
+//   },
+//   {
+//     breed: 'Dalmatian',
+//     averageWeight: 24,
+//     activities: ['running', 'fetch', 'agility'],
+//   },
+//   {
+//     breed: 'Labrador',
+//     averageWeight: 28,
+//     activities: ['swimming', 'fetch'],
+//   },
+//   {
+//     breed: 'Beagle',
+//     averageWeight: 12,
+//     activities: ['digging', 'fetch'],
+//   },
+//   {
+//     breed: 'Husky',
+//     averageWeight: 26,
+//     activities: ['running', 'agility', 'swimming'],
+//   },
+//   {
+//     breed: 'Bulldog',
+//     averageWeight: 36,
+//     activities: ['sleeping'],
+//   },
+//   {
+//     breed: 'Poodle',
+//     averageWeight: 18,
+//     activities: ['agility', 'fetch'],
+//   },
+// ];
+
+// //1
+// const huskyWeight = breeds.find(bre => bre.breed === 'Husky').averageWeight;
+// console.log(huskyWeight);
+
+// //2
+// const dogBothActivities = breeds.find(
+//   bre => bre.activities.includes('running') && bre.activities.includes('fetch')
+// ).breed;
+// console.log(dogBothActivities);
+
+// //3
+// const allActivities = breeds.map(bre => bre.activities).flat();
+// console.log(allActivities);
+
+// //4
+// const uniqueActivities = [...new Set(breeds.flatMap(bre => bre.activities))];
+// console.log(uniqueActivities);
+
+// //5
+// const [...swimmingAdjacent] = new Set(
+//   breeds
+//     .filter(bre => bre.activities.includes('swimming'))
+//     .flatMap(bre => bre.activities)
+//     .filter(activity => activity !== 'swimming')
+// );
+// console.log(swimmingAdjacent);
+
+// //6
+// const allAverageWeight = breeds.every(bre => bre.averageWeight >= 10);
+// console.log(allAverageWeight);
+
+// //7
+// const activeBreed = breeds.some(bre => bre.activities.length >= 3);
+// console.log(activeBreed);
+
+// //bonus
+// const heaviestBreed = [];
+// for (const bre of breeds) {
+//   heaviestBreed.push(bre.averageWeight);
+// }
+// console.log(
+//   breeds.find(bre => bre.averageWeight === Math.max(...heaviestBreed)).breed
+// );
+
+// const fetchWeights = breeds
+//   .filter(bre => bre.activities.includes('fetch'))
+//   .map(bre => bre.averageWeight);
+// const heaviestFetchBreed = Math.max(...fetchWeights);
+// console.log(heaviestFetchBreed);
+//=====================SORTING ARRAYS=========================
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// // String
+// const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+// // Mutates the original array
+// console.log(owners.sort());
+// console.log(owners);
+
+// // Numbers
+// console.log(movements);
+
+// // return < 0 A before B (keep order)
+// // return > 0 B before A (Switch order)
+
+// // Ascending
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (a < b) return -1;
+// });
+// movements.sort((a, b) => a - b);
+// console.log(movements);
+
+// // Descending
+// movements.sort((a, b) => {
+//   if (a > b) return -1;
+//   if (a < b) return 1;
+// });
+// movements.sort((a, b) => b - a);
+// console.log(movements);
