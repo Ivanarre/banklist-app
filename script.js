@@ -10,6 +10,7 @@ const account1 = {
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+  type: 'premium',
 };
 
 const account2 = {
@@ -17,6 +18,7 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+  type: 'standard',
 };
 
 const account3 = {
@@ -24,6 +26,7 @@ const account3 = {
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
+  type: 'premium',
 };
 
 const account4 = {
@@ -31,6 +34,7 @@ const account4 = {
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
+  type: 'basic',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -598,3 +602,242 @@ btnSort.addEventListener('click', function (e) {
 // });
 // movements.sort((a, b) => b - a);
 // console.log(movements);
+//=====================ARRAY GROUPING=======================
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// console.log(movements);
+
+// const groupedMovements = Object.groupBy(movements, movement =>
+//   movement > 0 ? 'deposits' : 'widthdrawals'
+// );
+// console.log(groupedMovements);
+
+// const groupedByActivity = Object.groupBy(accounts, account => {
+//   const movementCount = account.movements.length;
+//   if (movementCount >= 8) return 'very active';
+//   if (movementCount >= 4) return 'active';
+//   if (movementCount >= 1) return 'moderate';
+//   return 'inactive';
+// });
+// console.log(groupedByActivity);
+
+// const groupedAccounts = Object.groupBy(accounts, account => account.type);
+// console.log(groupedAccounts);
+
+// const groupedAccounts1 = Object.groupBy(accounts, ({ type }) => type);
+// console.log(groupedAccounts1);
+//==================WAYS OF CREATING & FILLING ARRAYS==================
+// const arr = [1, 2, 3, 4, 5, 6, 7];
+// console.log(new Array(1, 2, 3, 4, 5, 6, 7));
+
+// // create an empty array with 7 avilable space
+// // Empty arrays + fill method
+// const x = new Array(7);
+// console.log(x);
+
+// x.fill(1);
+// x.fill(1, 3, 5);
+// console.log(x);
+
+// arr.fill(23, 4, 6);
+// console.log(arr);
+
+// // Array.from
+// const y = Array.from({ length: 7 }, () => 1);
+// console.log(y);
+
+// const z = Array.from({ length: 7 }, (_, i) => i + 1);
+// console.log(z);
+
+// labelBalance.addEventListener('click', function () {
+//   const movementsUI = Array.from(
+//     document.querySelectorAll('.movements__value'),
+//     el => Number(el.textContent.replace('€', ''))
+//   );
+
+//   console.log(movementsUI);
+
+//   // const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+//   // console.log(movementsUI2);
+// });
+//====================NON-DESTRUCTIVE ALTERNATIVES======================
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// console.log(movements);
+
+// // toReversed method
+// const reversedMov = movements.toReversed();
+// console.log(reversedMov);
+
+// // toSorted (sort), toSplice (splice)
+
+// // movements[1] = 2000;
+// // with method
+// const newMovements = movements.with(1, 2000);
+// console.log(newMovements);
+// console.log(movements);
+//===========================================================
+// // Array Methods Practice
+
+// //1.
+// const bankDepositSum = accounts
+//   .flatMap(acc => acc.movements)
+//   .filter(mov => mov > 0)
+//   .reduce((acc, mov) => acc + mov, 0);
+// console.log(bankDepositSum);
+
+// //2.
+// /* Count how many deposits there have been in the bank with at least 1,000 */
+// const numDeposits1000 = accounts
+//   .flatMap(acc => acc.movements)
+//   .reduce((count, cur) => (cur >= 1000 ? count + 1 : count), 0);
+// console.log(numDeposits1000);
+
+// // Prefixed ++ operator
+// let a = 10;
+// console.log(++a);
+// console.log(a);
+
+// //3.
+// /*Create an object which ontains the sum of the deposits & withdrawals.*/
+// const { deposit, withdrawals } = accounts
+//   .flatMap(acc => acc.movements)
+//   .reduce(
+//     (sums, cur) => {
+//       cur > 0 ? (sums.deposit += cur) : (sums.withdrawals += cur);
+//       return sums;
+//     },
+//     { deposit: 0, withdrawals: 0 }
+//   );
+
+// console.log(deposit, withdrawals);
+
+// //4.
+// //this is a nice title => This Is a Nice Title
+// const convertTitleCase = function (title) {
+//   const capitalize = str => str[0].toUpperCase() + str.slice(1);
+
+//   const exceptions = ['a', 'an', 'the', 'but', 'and', 'or', 'on', 'in', 'with'];
+
+//   const titleCase = title
+//     .toLowerCase()
+//     .split(' ')
+//     .map(word => (exceptions.includes(word) ? word : capitalize(word)))
+//     .join(' ');
+//   return capitalize(titleCase);
+// };
+// console.log(convertTitleCase('this is a nice title'));
+// console.log(convertTitleCase('this is a LONG title but not too long'));
+// console.log(convertTitleCase('and here is another title with an EXAMPLE'));
+//===========================LAST CHALLENGER=============================
+/* 
+Julia and Kate are still studying dogs. This time they are want to figure out if the dogs in their are eating too much or too little food.
+
+- Formula for calculating recommended food portion: recommendedFood = weight ** 0.75 * 28. (The result is in grams of food, and the weight needs to be in kg)
+- Eating too much means the dog's current food portion is larger than the recommended portion, and eating too little is the opposite.
+- Eating an okay amount means the dog's current food portion is within a range 10% above and below the recommended portion (see hint).
+
+YOUR TASKS:
+
+3. Create an array containing all owners of dogs who eat too much (ownersTooMuch) and an array with all owners of dogs who eat too little (ownersTooLittle).
+4. Log a string to the console for each array created in 3., like this: "Matilda and Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat too little!"
+5. Log to the console whether there is ANY dog eating EXACTLY the amount of food that is recommended (just true or false)
+6. Log to the console whether ALL of the dogs are eating an OKAY amount of food (just true or false)
+7. Create an array containing the dogs that are eating an OKAY amount of food (try to reuse the condition used in 6.)
+8. Group the dogs into the following 3 groups: 'exact', 'too-much' and 'too-little', based on whether they are eating too much, too little or the exact amount of food, based on the recommended food portion.
+9. Group the dogs by the number of owners they have
+10. Sort the dogs array by recommended food portion in an ascending order. Make sure to NOT mutate the original array!
+
+HINT 1: Use many different tools to solve these challenges, you can use the summary lecture to choose between them 😉
+HINT 2: Being within a range 10% above and below the recommended portion means: current > (recommended * 0.90) && current < (recommended * 1.10). Basically, the current portion should be between 90% and 110% of the recommended portion.
+
+TEST DATA:
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John', 'Leo'] },
+  { weight: 18, curFood: 244, owners: ['Joe'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+GOOD LUCK 😀
+*/
+
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John', 'Leo'] },
+  { weight: 18, curFood: 244, owners: ['Joe'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+//1.
+dogs.forEach(function (dog) {
+  dog.recFood = Math.floor(dog.weight ** 0.75 * 28);
+});
+console.log(dogs);
+
+//2.
+const sarahDog = dogs.find(dog => dog.owners.includes('Sarah'));
+const sarahsDogStats =
+  sarahDog.curFood > sarahDog.recFood ? 'Eating too much' : 'Eating too little';
+console.log(sarahsDogStats);
+
+//3.
+const ownersTooMuch = [];
+const ownersTooLittle = [];
+for (const dog of dogs) {
+  if (dog.curFood > dog.recFood) {
+    ownersTooMuch.push(...dog.owners);
+  } else {
+    ownersTooLittle.push(...dog.owners);
+  }
+}
+console.log(ownersTooMuch);
+console.log(ownersTooLittle);
+
+//4.
+const displayStr = function (ownerTooMuch, ownerTooLittle) {
+  const firstStr = `"${ownerTooMuch
+    .join(' ')
+    .replaceAll(' ', ' and ')
+    .concat("'s dogs eat too much!")}"`;
+  const secondStr = firstStr.concat(
+    ` and "${ownerTooLittle.join(' ').replaceAll(' ', ' and ')}"`
+  );
+  console.log(secondStr);
+};
+displayStr(ownersTooMuch, ownersTooLittle);
+
+//5.
+console.log(dogs.some(dog => dog.curFood === dog.recFood));
+
+//6.
+console.log(
+  dogs.every(
+    dog => dog.curFood >= dog.recFood * 0.9 && dog.curFood <= dog.recFood * 1.1
+  )
+);
+
+//7.
+const checkEatingOkay = dog =>
+  dog.curFood >= dog.recFood * 0.9 && dog.curFood <= dog.recFood * 1.1;
+
+const eatingOkay = dogs.filter(dog => {
+  return checkEatingOkay(dog);
+});
+console.log(eatingOkay);
+
+//8.
+const groupDogs = Object.groupBy(dogs, dog => {
+  if (checkEatingOkay(dog)) return 'exact';
+  if (dog.curFood > dog.recFood) return 'too-much';
+  if (dog.curFood < dog.recFood) return 'too-little';
+});
+console.log(groupDogs);
+
+//9. //Group the dogs by the number of owners they have
+const ownerGroup = Object.groupBy(dogs, dog => `${dog.owners.length}-owners`);
+console.log(ownerGroup);
+
+//10.
+const sortedRecFood = dogs.toSorted((a, b) => b.recFood - a.recFood);
+console.log(sortedRecFood);
