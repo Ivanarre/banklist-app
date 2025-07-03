@@ -4,6 +4,54 @@
 /////////////////////////////////////////////////
 // BANKIST APP
 
+/////////////////////////////////////////////////
+// Data
+
+// DIFFERENT DATA! Contains movement dates, currency and locale
+
+const account1Time = {
+  owner: 'Jonas Schmedtmann',
+  movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
+  interestRate: 1.2, // %
+  pin: 1111,
+
+  movementsDates: [
+    '2019-11-18T21:31:17.178Z',
+    '2019-12-23T07:42:02.383Z',
+    '2020-01-28T09:15:04.904Z',
+    '2020-04-01T10:17:24.185Z',
+    '2020-05-08T14:11:59.604Z',
+    '2020-05-27T17:01:17.194Z',
+    '2020-07-11T23:36:17.929Z',
+    '2020-07-12T10:51:36.790Z',
+  ],
+  currency: 'EUR',
+  locale: 'pt-PT', // de-DE
+};
+
+const account2Time = {
+  owner: 'Jessica Davis',
+  movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+  interestRate: 1.5,
+  pin: 2222,
+
+  movementsDates: [
+    '2019-11-01T13:15:33.035Z',
+    '2019-11-30T09:48:16.867Z',
+    '2019-12-25T06:04:23.907Z',
+    '2020-01-25T14:18:46.235Z',
+    '2020-02-05T16:33:06.386Z',
+    '2020-04-10T14:43:26.374Z',
+    '2020-06-25T18:49:59.371Z',
+    '2020-07-26T12:01:20.894Z',
+  ],
+  currency: 'USD',
+  locale: 'en-US',
+};
+
+const accountsTime = [account1Time, account2Time];
+
+///////////////////////////////////////////////////
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
@@ -80,7 +128,7 @@ const displayMovements = function (movement, sort = false) {
       i + 1
     } ${type}</div>
         <div class="movements__date">3 days ago</div>
-        <div class="movements__value">${mov}€</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
 
@@ -115,25 +163,25 @@ const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes} €`;
+  labelSumIn.textContent = `${incomes.toFixed(2)} €`;
 
   const outcomes = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   // remove negative sign -
-  labelSumOut.textContent = `${Math.abs(outcomes)} €`;
+  labelSumOut.textContent = `${Math.abs(outcomes).toFixed(2)} €`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter(int => int >= 1)
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest} €`;
+  labelSumInterest.textContent = `${interest.toFixed(2)} €`;
 };
 
 const calcDisplayBalance = function (acc) {
   acc.balace = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balace} €`;
+  labelBalance.textContent = `${acc.balace.toFixed(2)} €`;
 };
 
 // Event handlers
@@ -188,7 +236,7 @@ btnTransfer.addEventListener('click', function (e) {
 
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
@@ -761,83 +809,169 @@ const dogs = [
 GOOD LUCK 😀
 */
 
-const dogs = [
-  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
-  { weight: 8, curFood: 200, owners: ['Matilda'] },
-  { weight: 13, curFood: 275, owners: ['Sarah', 'John', 'Leo'] },
-  { weight: 18, curFood: 244, owners: ['Joe'] },
-  { weight: 32, curFood: 340, owners: ['Michael'] },
-];
+// const dogs = [
+//   { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+//   { weight: 8, curFood: 200, owners: ['Matilda'] },
+//   { weight: 13, curFood: 275, owners: ['Sarah', 'John', 'Leo'] },
+//   { weight: 18, curFood: 244, owners: ['Joe'] },
+//   { weight: 32, curFood: 340, owners: ['Michael'] },
+// ];
 
-//1.
-dogs.forEach(function (dog) {
-  dog.recFood = Math.floor(dog.weight ** 0.75 * 28);
-});
-console.log(dogs);
+// //1.
+// dogs.forEach(function (dog) {
+//   dog.recFood = Math.floor(dog.weight ** 0.75 * 28);
+// });
+// console.log(dogs);
 
-//2.
-const sarahDog = dogs.find(dog => dog.owners.includes('Sarah'));
-const sarahsDogStats =
-  sarahDog.curFood > sarahDog.recFood ? 'Eating too much' : 'Eating too little';
-console.log(sarahsDogStats);
+// //2.
+// const sarahDog = dogs.find(dog => dog.owners.includes('Sarah'));
+// const sarahsDogStats =
+//   sarahDog.curFood > sarahDog.recFood ? 'Eating too much' : 'Eating too little';
+// console.log(sarahsDogStats);
 
-//3.
-const ownersTooMuch = [];
-const ownersTooLittle = [];
-for (const dog of dogs) {
-  if (dog.curFood > dog.recFood) {
-    ownersTooMuch.push(...dog.owners);
-  } else {
-    ownersTooLittle.push(...dog.owners);
-  }
-}
-console.log(ownersTooMuch);
-console.log(ownersTooLittle);
+// //3.
+// const ownersTooMuch = [];
+// const ownersTooLittle = [];
+// for (const dog of dogs) {
+//   if (dog.curFood > dog.recFood) {
+//     ownersTooMuch.push(...dog.owners);
+//   } else {
+//     ownersTooLittle.push(...dog.owners);
+//   }
+// }
+// console.log(ownersTooMuch);
+// console.log(ownersTooLittle);
 
-//4.
-const displayStr = function (ownerTooMuch, ownerTooLittle) {
-  const firstStr = `"${ownerTooMuch
-    .join(' ')
-    .replaceAll(' ', ' and ')
-    .concat("'s dogs eat too much!")}"`;
-  const secondStr = firstStr.concat(
-    ` and "${ownerTooLittle.join(' ').replaceAll(' ', ' and ')}"`
-  );
-  console.log(secondStr);
-};
-displayStr(ownersTooMuch, ownersTooLittle);
+// //4.
+// const displayStr = function (ownerTooMuch, ownerTooLittle) {
+//   const firstStr = `"${ownerTooMuch
+//     .join(' ')
+//     .replaceAll(' ', ' and ')
+//     .concat("'s dogs eat too much!")}"`;
+//   const secondStr = firstStr.concat(
+//     ` and "${ownerTooLittle.join(' ').replaceAll(' ', ' and ')}"`
+//   );
+//   console.log(secondStr);
+// };
+// displayStr(ownersTooMuch, ownersTooLittle);
 
-//5.
-console.log(dogs.some(dog => dog.curFood === dog.recFood));
+// //5.
+// console.log(dogs.some(dog => dog.curFood === dog.recFood));
 
-//6.
-console.log(
-  dogs.every(
-    dog => dog.curFood >= dog.recFood * 0.9 && dog.curFood <= dog.recFood * 1.1
-  )
-);
+// //6.
+// console.log(
+//   dogs.every(
+//     dog => dog.curFood >= dog.recFood * 0.9 && dog.curFood <= dog.recFood * 1.1
+//   )
+// );
 
-//7.
-const checkEatingOkay = dog =>
-  dog.curFood >= dog.recFood * 0.9 && dog.curFood <= dog.recFood * 1.1;
+// //7.
+// const checkEatingOkay = dog =>
+//   dog.curFood >= dog.recFood * 0.9 && dog.curFood <= dog.recFood * 1.1;
 
-const eatingOkay = dogs.filter(dog => {
-  return checkEatingOkay(dog);
-});
-console.log(eatingOkay);
+// const eatingOkay = dogs.filter(dog => {
+//   return checkEatingOkay(dog);
+// });
+// console.log(eatingOkay);
 
-//8.
-const groupDogs = Object.groupBy(dogs, dog => {
-  if (checkEatingOkay(dog)) return 'exact';
-  if (dog.curFood > dog.recFood) return 'too-much';
-  if (dog.curFood < dog.recFood) return 'too-little';
-});
-console.log(groupDogs);
+// //8.
+// const groupDogs = Object.groupBy(dogs, dog => {
+//   if (checkEatingOkay(dog)) return 'exact';
+//   if (dog.curFood > dog.recFood) return 'too-much';
+//   if (dog.curFood < dog.recFood) return 'too-little';
+// });
+// console.log(groupDogs);
 
-//9. //Group the dogs by the number of owners they have
-const ownerGroup = Object.groupBy(dogs, dog => `${dog.owners.length}-owners`);
-console.log(ownerGroup);
+// //9. //Group the dogs by the number of owners they have
+// const ownerGroup = Object.groupBy(dogs, dog => `${dog.owners.length}-owners`);
+// console.log(ownerGroup);
 
-//10.
-const sortedRecFood = dogs.toSorted((a, b) => b.recFood - a.recFood);
-console.log(sortedRecFood);
+// //10.
+// const sortedRecFood = dogs.toSorted((a, b) => b.recFood - a.recFood);
+// console.log(sortedRecFood);
+//=============================NUMBERS=============================
+// console.log(23 === 23.0); // true
+
+// // Base 10 - 0 to 9. 1/10 = 0.1. 3/10 = 3.3333333
+// // Binary base 2 - 0 1
+// console.log(0.1 + 0.2);
+// console.log(0.1 + 0.2 === 0.3); // flase
+
+// // Converting String to a number
+// console.log(Number('23'));
+// console.log(+'23'); // type coercion
+
+// // Parsing Number form String
+// console.log(Number.parseInt('30px', 10)); // should it start in number
+// console.log(Number.parseInt('e23', 10)); // NaN
+
+// console.log(Number.parseInt('2.5rem'));
+// console.log(Number.parseFloat('2.5rem'));
+
+// // console.log(Number.parseFloat('2.5rem'));
+
+// // Boolean
+// // Check if value is NaN
+// console.log(Number.isNaN(20));
+// console.log(Number.isNaN('20'));
+// console.log(Number.isNaN(+'20X'));
+// console.log(Number.isNaN(23 / 0));
+
+// // Checking if value is number
+// console.log(Number.isFinite(20));
+// console.log(Number.isFinite('20'));
+// console.log(Number.isFinite(+'20X'));
+// console.log(Number.isFinite(23 / 0));
+
+// console.log(Number.isInteger(23));
+// console.log(Number.isInteger(23.0));
+// console.log(Number.isInteger(23 / 0));
+//=====================MATH & ROUNDING==========================
+// get the square root
+console.log(Math.sqrt(25));
+console.log(25 ** (1 / 2));
+// cubic
+console.log(8 ** (1 / 2));
+
+// get the max value
+console.log(Math.max(2, 18, 23, 11, 2));
+console.log(Math.max(2, 18, '23', 11, 2));
+console.log(Math.max(2, 18, '23p', 11, 2)); // NaN
+
+// get the min value
+console.log(Math.max(2, 18, 23, 11, 2));
+
+// calculate area of a cirlce
+console.log(Math.PI * Number.parseFloat('10px') ** 2);
+
+// generate random number
+console.log(Math.trunc(Math.random() * 6) + 1);
+
+// random number generator dynamically
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+// 0...1 -> 0...(max - min) -> min....max
+console.log(randomInt(10, 20));
+
+// Rounding integers
+console.log(Math.trunc(23.3)); //23
+
+console.log(Math.round(23.3)); //23
+console.log(Math.round(23.9)); //24
+
+// round up
+console.log(Math.ceil(23.3)); // 24
+console.log(Math.ceil(23.9)); //24
+
+// round down
+console.log(Math.floor(23.3)); // 23
+console.log(Math.floor('23.9')); // 23
+
+console.log(Math.trunc(-23.3)); // -23
+console.log(Math.floor(-23.3)); // -24
+
+// Rounding decimals
+// toFixed always return string
+console.log((2.7).toFixed(0));
+console.log((2.7).toFixed(3));
+console.log(+(2.345).toFixed(2));
