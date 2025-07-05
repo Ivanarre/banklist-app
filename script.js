@@ -143,7 +143,6 @@ const formatMovementDate = function (date, locale) {
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
   const daysPassed = calcDaysPassed(new Date(), date);
-  console.log(daysPassed);
 
   if (daysPassed === 0) return 'Today';
   if (daysPassed === 1) return 'Yesterday';
@@ -170,7 +169,6 @@ const displayMovements = function (acc, sort = false) {
   const combindMovsDates = acc.movements.map((mov, i) => {
     return { movement: mov, movementDate: acc.movementsDates.at(i) };
   });
-  console.log(combindMovsDates);
 
   // const movs = sort
   //   ? acc.movements.slice().sort((a, b) => a - b)
@@ -193,7 +191,7 @@ const displayMovements = function (acc, sort = false) {
       i + 1
     } ${type}</div>
         <div class="movements__date">${displayDate}</div>
-        <div class="movements__value">${formattedMov}€</div>
+        <div class="movements__value">${formattedMov}</div>
       </div>
     `;
 
@@ -222,6 +220,33 @@ const updateUI = function (acc) {
 
   //Display summary
   calcDisplaySummary(acc);
+};
+
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = `${Math.trunc(time / 60)}`.padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+
+    // In each call, print the remaining time the UI
+    labelTimer.textContent = `${min}: ${sec}`;
+
+    // When 0 seconds, stop timer and log out user
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = `Log in to get started`;
+      containerApp.style.opacity = 0;
+    }
+
+    // Decrease 1s
+    time--;
+  };
+  // Set time to 5 minutes
+  let time = 120;
+
+  // Call the timer every second
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
 };
 
 const calcDisplaySummary = function (acc) {
@@ -254,12 +279,12 @@ const calcDisplayBalance = function (acc) {
 };
 
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
 
 // FAKE ALWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -305,6 +330,10 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    // Timer
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -333,6 +362,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    // Reset timer
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -341,14 +374,20 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
+    setTimeout(function () {
+      // Add movement
+      currentAccount.movements.push(amount);
 
-    // Add transfer date
-    currentAccount.movementsDates.push(new Date().toISOString());
+      // Add transfer date
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+
+      // Reset timer
+      clearInterval(timer);
+      timer = startLogOutTimer();
+    }, 2500);
   }
 
   inputLoanAmount.value = '';
@@ -1236,3 +1275,32 @@ GOOD LUCK 😀
 //   navigator.language,
 //   new Intl.NumberFormat(navigator.language, options).format(num)
 // );
+//=================SETTIMEOUT & SETINTERVAL======================
+
+// setTimeout
+// const ingredients = ['olives', 'spinach'];
+// const pizzaTimer = setTimeout(
+//   (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2}🍕`),
+//   3000,
+//   ...ingredients
+// );
+// console.log('Waiting...');
+
+// if (ingredients.includes('spinach')) clearTimeout(pizzaTimer);
+
+// setTimeout;
+// setInterval(function () {
+//   const now = new Date();
+//   const hour = `${now.getHours()}`.padStart(2, 0);
+//   const min = now.getMinutes();
+//   const second = now.getSeconds();
+//   // console.log(`${hour}/${min}/${second}`);
+// }, 1000);
+
+// create a clock that only log the hour min and second to the console
+// const day = `${now.getDate()}`.padStart(2, 0);
+// const month = `${now.getMonth() + 1}`.padStart(2, 0);
+// const year = now.getFullYear();
+// const hour = `${now.getHours()}`.padStart(2, 0);
+// const min = `${now.getMinutes()}`.padStart(2, 0);
+// labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
